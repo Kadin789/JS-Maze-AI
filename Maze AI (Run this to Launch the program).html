@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Maze AI</title>
+<style>
+    canvas {
+        border: 1px solid #23272A;
+        background-color: #dddddd;
+
+    }
+</style>
+</head>
+<body style="background-color: #181818 " id="body" onload="Start()" onkeypress="preCheckPolly()" onclick="toggleBlock(event)">
+	<script type="text/javascript" src="Mel.js"></script>
+	<script type="text/javascript" src="Polly.js"></script>
+	<script>
+		/* Started on 2/2/2021
+		 Oh my god this code is so satisfying to use because of the fact that it actually works as intended. I can't believe it. Let's gooo!
+		Next part of the plan for this is to make the walls work. Essentially, I need to mark those as red zones for the AI, so that it cannot
+		move into or through walls, as that'd ruin the whole point of a maze. After that, it's time to get to coding an AI!
+		For the AI itself, I'm not sure yet. But I'm sure that I'm gonna have some real fun making it :)
+		But for now, time to go! I love coding. I may not be the absolute best at it but I sure do love doing it nonetheless.
+
+		Day 2's even better! I made a coordinate system and it works beautifully. I love it, I love it I love it I LOVE IT!
+		Only thing I gotta remind myself about is the fact that
+		I need to make sure that I don't forget to fully implement it into the code before I do anything else,
+		as it is way more readable and efficient than the current system.
+		With that, I'm outta time. See you later, Future Kad!
+
+		Okay next few days have been a bit ugly but there's some good at the end of this.
+		 I finally found a source that actually explains the thing I wanted to know in a clear and concise manner.
+		So let me put this here
+		for reference later. The Depth First Search algorithm is one that will go as far as it can in any one direction,
+		then go back and find a new way to go.
+
+		Right. Got the base for the AI up and running, but now it's time to put the I in AI. The function pathfind will do that!
+		All you gotta do is make it so that if it detects a path block ahead by 2 blocks
+		it sends out a signal to our pal Mel.
+		 He'll then be like "oh snapparoones" and turn around, going the exact amount of blocks he traveled that way plus a random amount.
+		  Mel's pretty great.
+		Man. today was good.
+		 I feel like I'm really getting somewhere with this AI that I never thought I would,
+		 as it's actually working as intended so far, and I've seen Mel in action.
+		He's a little confused on mazes, but he's got the spirit. All we'll need to do is get that pathfinder function done.
+		Sound cool Future Kad? Give me an okay whenever you read this.
+
+		Hi past me. Partially finished that findPath function.
+		Some new stuff's made and Mel just needs a little more polishing, and he'll be complete! I know it. He'll do it. He can do it.
+
+		Regret to inform you that the first iteration of maze maker mel has failed.
+		Gonna have to remake quite a bit of the code so that I can actually make a proper Maze Making AI.
+		No worries, Mel will still be the star of the show. He'll just have to be reworked so that he.. well, works.
+
+
+		My man... Mel.. YOU DID IT! YOU DID IT YOU DID IT! YOU'RE MAKING SOMETHING THAT RESEMBLES MAZES! WOOOO!
+		Man, that felt good. All I'm gonna do now is add a backtrack function so that it will reroll and keep making mazes.
+		Progress is going again, man!
+		Makes me happy to hear.
+		Definitely gonna need the backtrack function so that it can go backwards.
+
+		After days and days of working endlessly, I have finally done it. Mel is complete. He makes mazes perfectly.
+		He's FUNCTIONAL! AND IT'S BEAUTIFUL! I LOVE IT!
+		That's half of the job right there! Now all I need to do is make Mel's friend. A girl named Path Prevailer Polly.
+		She will be my maze solving gal.
+
+		Yeesh. It's been a while since I've made a comment log here. So, I'm gonna a make an update today.
+		So, Mel was simple enough once I found out what I had to do to make him work.
+		Polly on the other hand seems like a whole different can of beans. She's difficult to code.
+		I've hit a lot of brick walls as of late and have no idea how to overcome them.
+		If I'm gonna get her to work I might have to yet again look around the internet and find out how others did it,
+		 as my my ways of doing it are rather, er, complex, to say the least.
+		Main problem now is getting her to move around properly.
+		Once I get the basic movement down I can get to path marking and al- wait that just gave me an idea. I could make it so
+		she has different modes based on how much there is to work with!
+
+		NOTE TO SELF SINCE I'M OUT OF TIME: HAVE IT SO THAT POLLY HAS DIFFERENT MODES OF MOVEMENT BASED ON HOW MANY DIRECTIONS SHE CAN GO.
+		IF IT'S A BREAK OR PATH SHE WILL GO INTO A NEW PHASE.
+
+
+		New update to the log. 3/2/21.
+		Last few days have been mostly getting Polly's ability to b-line it to the goal to work.
+		The function basically acts as Polly's eyes and common sense. If she sees the goal, she'll go to it.
+		If she can't and there's a wall in the way, she won't. Had some trouble along the way, but I managed.
+		Now it's time to get to the whole part where I need to actually make Polly's AI,
+		that's because in order for me to do anything more with Polly she needs to be able to make
+		decisions and have the ability to move. It'll be difficult, definitely, but possible overall.
+		Regardless tho, I'm happy that Polly's getting somewhere, she's great!
+
+		Update 3/8/21
+		Been furthering Polly's Intelligence so that she can further solve mazes.
+		She's shown the ability to be able to solve mazes however this is not by intelligence but
+		by luck. Her basic markers are down, however marking paths as explored or dead ends is still
+		in development. In fact I may remove one of them as explored and dead ends are essentially
+		synonymous, and would be useless if both variables. Anywho, Hip hip hooray, Polly's being awesome.
+		She's smarter than ever and as said before can solve mazes if she gets lucky enough to
+		choose the right directions. She's further than she has ever gotten before.
+		No offense Mel, but you got competition.
+		EDIT: Not deleting Dead End, as although a path is being explored it does not automatically mean
+		it's a dead end, and therefore both have a purpose.
+
+		Update 3/11/21
+		Ohh boy I think I found something that's really annoying to code. Polly's Path marking isn't the best.
+		Bugs galore, infuriatingly difficult to with and refuses to work as intended. It's as if it
+		wants to not work, trap her, and make it so that I can't get anywhere. Sometimes it works,
+		then most of the time it doesn't and I can't seem to find out what the exact problem is.
+		I will probably have to rework the code at some point, and at this point I'm close to just
+		saying screw it.
+
+		Update 3/12/21
+		Good enough, got it working for the most part and just have to polish a few bugs that are remaining
+		Should be able to do that easily next monday if I can. Polly will be done soon.
+
+		Update 3/15/21
+		SHE WORKS SHE WORKS SHE WORKS SHE WORKS SHE WORKS SHE WORKS!!!
+		MOTNHS, MONTHS OF EFFORT AND IT'S FINALLY DONE, THE MAZE AI IS FUNCTIONAL! POLLY WORKS, MEL WORKS,
+		IT ALL W O R K S ! YESSSS!
+		There's still a few bugs regarding how she will sometimes decide to be
+		stupid and not check every unexplored before marking a place as a dead end, but otherwise
+		she is fully operation and will solve any maze Mel throws at her. So I call this a success in
+		every way possible.
+
+		To put this whole thing simply, I've done great things when making this and had lots of fun while I was at it.
+		Mel and Polly are great.
+		They worked exactly how I wanted them to and they came about to be after hard work and dedication.
+		With all the time I spent on them
+		its surprising that I didn't ever give up during that time, cause man this was a pain to get working.
+		All of this was just to make my Snake AI good.
+		And it failed to do that in every manner to which it could ever be doing that, haha.
+		Guess I'm moving on to a new AI though. And, pretty soon, a new
+		coding language which I'll be using to make my future AI so that they are self learning.
+
+		So anyway, hi whoever I show this to (or maybe just an older me looking back).
+		I'm gonna add some new comments for you to be able to understand everything
+		in my hellhole of coding. I didn't really try to make this too pretty, I just made it work and left.
+		Probably will make the code more efficient and cut down on the code at some point, but now's not that time.
+		Have fun exploring!
+		P.S. If you want the full experience of my AI's thought process you should check out inspect element and go to console.
+
+		8/24/2022
+		I've come back in order to do some optimizations on the old code using my new knowledge.
+		If I'm being honest I've hit a bit of a roadblock in my progression and I'm hoping showing how I have developed since then, I can get more inspired to keep going.
+		This is gonna be just a case of making things run faster than they do now by making checks more efficient, as well as making most algorithms more readable and fast.
+		I want to see how far I can push this.
+
+		Right, looking at it now I can already see some changes I can make here.
+		To start off, I think I should localize all of the variables so that almost nothing is a global. I can see how I can do that now pretty easily. I just have to make Polly and Mel
+		their own subclasses which will have additional functions that they currently use in their loops.
+
+		I'm also going to overhaul the way that walls are checked via an official mapping coordinate system that will make removing and adding walls significantly faster than it is currently.
+
+
+		But in short, here's the list of things to do:
+		- Make polly's markers not global
+		- Revamp block IDs so that they are not utter garbage via a 2D array so that coordinates can be grabbed nearly instantly.
+		- Rework the coordinate system to be based on the block id system.
+		- Give things actual IDs so that they can be quickly and easily checked.
+		- Leave polly and mel as their own people. Making them have ids will probably make them very unhappy and that's the last thing I want.
+
+
+		In Long:
+		Revamped Block IDs
+		ID List
+		0 - Nothing
+		1 - Wall
+		2 - Goal
+
+
+		What I've done so far:
+		- Removed Width and Height from component code, since it's all the same size anyway.
+		- Converted BlockID to a 2D array
+
+
+		Beyond this, the code's gonna break completely for a while. I'm not gonna be able to test it in the way that I want to until everything is done.
+		Time to make the block ids a 2d array
+		While Polly's definitely not taking the lack of walls well, it could definitely be worse. She's throwing markers all over the place and it's rather chaotic, so let's make the next step getting walls to work.
+		I am reworking walls entirely.
+		The way they work currently is godawful and inefficient.
+		I can't leave them the way they are.
+		I know it will require me to make significant changes to the code, but I came into this expecting that.
+
+		Everything was going so well.
+		Polly. No, wait, she's not here.
+		Walls.
+		You're not supposed to be able to go through them.
+		Please stop going through walls at JUST THE BEGINNING.
+
+		And the best part is there aren't any errors to indicate what's going on.
+		I have no idea why you are suddenly deciding that you are all of a sudden able to go through walls by choice, but it's driving me crazy.
+
+		August 25th, 2022
+
+		Right, time to get back to it. I hope that I can get it all to work better this time than I did last time.
+		I'm gonna work on completely reworking the wall system so that it isn't as problematic as it is now.
+		Actually, I may as well make the component used for Mel and Polly separate from the one used for everything else.
+
+		oh good god what the hell have I done mel are you okay.
+		Right I did something wrong and Mel had a mental breakdown.
+		hooray its fixed now I just need to rework all mentions of walls
+		Right, I've completely integrated the wall code into this part of the code. And I've realized that the new ID system is so good that I'm going to remove the coordinate system and completely base things off of
+		it rather than coordinates.
+		Now I have to talk to Mel.
+
+		Right, I think I got everything having to do with walls in Mel's code fixed up.
+		Hopefully he's alright with it and won't get too mad at me.
+		Mel, please. Work with me.
+		You've done the whole thing backwards for whatever reason.
+
+		WOO! I did it! Nice. It was an easy fix too.
+		Now, onto Polly. She should be nice enough with it all... hopefully.
+		...Nope. I forgot how intelligent and highly complex polly was. Not to mention how much she relied on the coordinates system.
+		It's gonna take a lot of therapy and change in order to help her transition to the new blockid system.
+		Going to start by merging all the markers into one class, and then merge them into the BlockID system somehow.
+		I think I have an idea of how I'm gonna do this.
+
+		Wow, I really did make Polly really complex. I'm actually impressed with past me on this. It's jank in some places, but other stuff is really nice and convenient.
+		No, actually. I'm gonna readd the coordinates code. It's actually really convenient and nice to have, and makes the code more readable.
+
+		Yeah, Polly is certainly something. I had to really work a lot of dumb stuff in to make her work from the looks of it.
+		Now that I know what I'm doing more, it's definitely good to be able to go back and remake this with my skills now.
+		It helps me realize that I have actually improved from last year, and can think about things in new perspectives and ways I didn't before.
+
+		Things I've done today
+		- Begun reworking components and adding the new block class.
+		- Removed Wall and Goal Variables
+		- Removed Coordinates code
+		- Integrated new wall code into Mel's programming
+		- Readded Coordinates code (but altered it to work with blockids)
+		- Begun heavy modifications to Polly's code.
+
+		September 6th, 2022
+		Wow, it's been a little bit, hasn't it?
+		Well, it's time to get back to it for the next hour until I have ICT. Thankfully for once I did the readings.
+		Anyway, I'm closing in on being done with this whole thing. All I have to finish now is making Polly work and doing new comments the explain the code.
+		After this? I think I'm going to start a new project that is simpler, but still gets me through the door for machine learning.
+		I'll build up to the maze one while learning the fundamentals on the way.
+
+
+		Right, just did a test. Thankfully when you assign a new a variable previously existing coordinate values it doesn't use the constructor a second time.
+		I guess that should make since because you do not use "new".
+
+		I've been working for a while so I think it's time that I take a break to say some of my thoughts so far.
+		So far, I believe that I've gotten a lot of insight on how I want things to work.
+		I've had to make adjustments to the coordinates code, specifically adding the move and gettype functions, and I finished making Polly's vision and have made significant progress on getting her main maze function.
+		As I've been working through it, I have been thinking about a variety of optimizations I can make to the code to make it better, and I think I should note down a few for later.
+		- move the code for markers in pollySolveMaze to the top so that it only has to get the possible moves once it knows that there isn't just an easy way out of just checking for markers that it knows
+		it can go through.
+
+		well, that's all I have so far. But yeah! I'm really happy with this so far and I hope that it keeps getting better.
+		Log end for now. I will pick this up after class.
+
+		Log start again. Started about 10 or 20 minutes ago and I've been making really good progress.
+		Added a new function to coordinates to make loops more convenient.
+
+		And with that, polly should be ready for the final bits of testing to see if she works as she's supposed to.
+		Hopefully she's got it in her, and I didn't do her wrong with the new code.
+		Here goes nothing. Mel, give her the signal.
+
+		...right, of course something goes wrong.
+
+		I made a mistake.
+		Polly what the hell is this?
+		You marked the entire god damn path as unexplored.
+
+		Errors I've had to patch:
+		1 Tried to set a value from a returned value.
+		Fixed it by adding yet another function to the coordinates class, setType.
+
+		2 Didn't check if it was at a valid value after moving, which was where the goal check was at.
+		Fixed by moving the goal check between the error check and the moving process.
+
+		3 getAdjacentMarkers checks blocks that don't exist.
+		fixed by adjusting the coordinates function for moving
+
+		4 Noticed that I had used && instead of || for checkPossibleMoves, which resulted in no moves being impossible in Polly's mind,
+		which despite being inspiring is not reasonable and is in fact rather bad in this case.
+		This would explain why Polly was putting markers everywhere.
+
+		well, it fixed the whole part where the markers were everywhere, but it also showed me I
+		had the conditions backwards.
+		obviously fixed that
+
+		5
+		oh no.
+		the worst kind of problem.
+		Polly you mother fucker did you just crash the entire website?
+		There's nothing to even work with there. the console doesn't log anything before you do it
+		After commenting the hell out of the code, I have found that it breaks immediately after the pre-check is initiated.
+
+		Right, I fixed the error and as I suspected it had to do with the while loop. It somehow went on infinitely.
+		But now I get onto a new problem.
+
+		6 getAdjacentMarkers is reading undefined values.
+		Fixed by adding idiot proofing to most functinos in coordinates class
+
+		7 i made a typo when doing math.random
+		fixed typo
+
+		8 I misunderstood the moves variable and therefore made the markers go all weird.
+		Fixed by reverting the function to not even acknowledge that moves exists.
+
+		9 forgot to make moves not the end condition for the i loop
+		fixed that too lol
+
+		10 forgot to remove moves from the other code in pollyMarkTurn
+		fixed
+
+		11 - yet again something is somehow undefined.
+		Fixed by rewriting the conditions in such a way that it no longer will even check the type unless it knows something exists above it.
+
+		12 - random typo again
+		fixed
+
+		13 - somehow it's still reading at the edge of the map.
+		i dunno man
+
+		like 5 bugs in one - Polly's markers were all fucked up
+		Had to fix a variety of things, but it was mainly that somehow, pollycord changed when temp changed.
+		Which makes no sense.
+
+		18 now, onto the part where polly is teleporting.
+		fixed it, had to make it so that it ended the function via a return after every possible movement was made.
+
+		19 - Polly is prioritizing explored markers over blank spaces.
+		Fixed by removing the code that had her prioritize it in the first place.
+
+		20. Infinite loops are back because my conditions on the while loop were backwads.
+		I swear to God it's the same thing that happened with pollycord before.
+		I'm gonna try to fix it using a const.
+
+		Nope, had to do a different const, and even then it didn't work.
+		It was because I forgot to make it &&, and I forgot to swap over wall type check
+
+		And even then..
+
+		21. polly is blind
+
+		you know what forget it i hate while loops
+		forget this
+		i'm done with them.
+
+		in an anime plot twist, it would appear that I changed a lot of things for nothing
+		It appears that type was the broken thing all along.
+		Fortunately, I noticed what was wrong.
+		And now Polly WORKS
+		LETS FUCKING GO
+		aside from a few quirks that I can work out over time, I'm 100% sure that THIS IS PROPERLY WORKING AS A GOD DAMN REWRITE
+		YESSSSSSSSSSS
+		YES YES YE SSYEEYSYESYESYSYESYSS
+
+		Alright, Mel. I'll let you give her the signal again.
+		Let's do this, for real this time.
+
+		22 - minor bugs involving the loop fixed
+
+		otherwise, now everything works right as far as I know. It's great!
+		like, seriously so rewarding, but yet I still feel like I could do better.
+		I can make Polly more refined and nicer looking on the eyes.
+		*/
+
+
+
+		//Component Variables (these are all the lil guys and gals around the map)
+		var pathPrevailerPolly;
+		var mazeMakerMel;
+		var BlockID = [];
+
+
+		// Config Variables
+		var moveLog = [];
+		var intv;
+		var melSpeed = 0;
+		var pollySpeed = 50;
+
+
+		//Start Code, self explanatory, start up the whole thing that happens here. Makes things exist and move.
+		function Start() {
+			arena.start();
+			pathPrevailerPolly = new component('pink', 0, 0);
+			mazeMakerMel = new component('orange', 0, 0);
+			for (i = 0; i < 21; i++) {  // This generates the blocks and gives them IDs
+				BlockID[i] = [];
+				for (let j = 0; j < 21; j++) {
+					BlockID[i][j] = new block(30 * i, 30 * j, 0);
+				}
+			}
+			fillWall();
+		}
+
+		//Arena Code
+		var arena = {
+			canvas: document.createElement("canvas"),
+			start: function () {
+				this.canvas.width = 630;
+				this.canvas.height = 630;
+				this.canvas.style.margin = "auto";
+				this.context = this.canvas.getContext("2d");
+				document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+				this.frameNo = 0;
+				this.interval = setInterval(updateGameArea, 20);
+			},
+			clear: function () {
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			},
+			stop: function () {
+				clearInterval(this.interval);
+			}
+		};
+
+		//Frame Code
+		function everyinterval(n) {
+			if ((arena.frameNo / n) % 1 == 0) { return true; }
+			return false;
+		}
+
+		//Component Code
+		function component(color, x, y) {
+			this.x = x;
+			this.y = y;
+			this.update = function () {
+				ctx = arena.context;
+				ctx.fillStyle = color;
+				ctx.fillRect(this.x, this.y, 30, 30);
+			};
+		}
+		function block(x, y, type) {
+			this.x = x;
+			this.y = y;
+			this.type = type;
+			this.update = function () {
+				ctx = arena.context;
+				switch (this.type) {
+					case 0:			// Empty Block
+						break;
+					case 1:			// Wall Block
+						ctx.fillStyle = 'black';
+						ctx.fillRect(this.x, this.y, 30, 30);
+						break;
+					case 2:			// Goal
+						ctx.fillStyle = 'green';
+						ctx.fillRect(this.x, this.y, 30, 30);
+						break;
+					case 3:			// Unexplored Polly Marker
+						ctx.fillStyle = 'rgba(0,125,125,0.5)';
+						ctx.fillRect(this.x, this.y, 30, 30);
+						break;
+					case 4:			// Explored Polly Marker
+						ctx.fillStyle = 'rgba(0, 100, 0, .50)';
+						ctx.fillRect(this.x, this.y, 30, 30);
+						break;
+					case 5:			// Dead End Polly Marker
+						ctx.fillStyle = 'red';
+						ctx.fillRect(this.x, this.y, 30, 30);
+						break;
+				}
+				ctx.strokeRect(this.x, this.y, 30, 30);
+			}
+		}
+
+		function control(event) {
+			preCheckPolly();
+		}
+
+
+		// Update Script
+		/*
+		Essentially what this does is take the new information about all the
+		dudes and says "oh shoot i should make that happen on the screen" and then makes it happen on the screen.
+		*/
+		function updateGameArea() {
+			var i;
+			arena.clear();
+			arena.frameNo += 1;
+			pathPrevailerPolly.update();
+
+			for (i = 0; i < BlockID.length; i++) {
+				for (let j = 0; j < BlockID[i].length; j++) {
+					BlockID[i][j].update();
+				}
+			}
+			mazeMakerMel.update();
+
+		}
+
+
+		// Gen Code
+
+		function toggleBlock(event) {
+			var curX = event.clientX;
+			var curY = event.clientY;
+			var curCord = {
+				x: Math.floor(curX / 30),
+				y: Math.floor(curY / 30)
+			};
+			console.log("User clicked at " + curCord.x + ", " + curCord.y);
+			if (BlockID[curCord.x][curCord.y].type == 1) {
+				console.log("Block here is a wall.");
+			}
+
+			/*
+			for (i=0; i<BlockID.length; i++) {
+				var blockCord = new coordinates(BlockID[i].x, BlockID[i].y);
+				if (curCord.equal(blockCord)) {
+						Goal.x = BlockID[i].x;
+						Goal.y = BlockID[i].y;
+						console.log("Moved Goal to " + blockCord.x + ", " + blockCord.y);
+						break;
+				}
+			}
+
+		Code I used in debugging, I click blocks and it tells me if there be a wall and what coordinates I clicked.
+		for (i=0; i<BlockID.length; i++) {
+				var blockCord = new coordinates(BlockID[i].x, BlockID[i].y);
+				if (curCord.equal(blockCord)) {
+					console.log("Clicked block at " + BlockID[i].x + ", " + BlockID[i].y);
+					for (j=0; j<wallBlock.length; j++) {
+						var wallCord = new coordinates(wallBlock[j].x, wallBlock[j].y);
+						if (blockCord.equal(wallCord)) {
+							console.log("Block contains wall at " + wallCord.toString());
+							break;
+						}
+					}
+				}
+			*/
+		}
+
+		/*
+		Right here is some code that is used by Mel to detect walls throughout his journey to make a maze.
+		I go into more detail on what he does in his section of the code, but what he essentially does is check if there's a wall in his path.
+		if there is, he yeet. if there isn't, he vibing.
+		*/
+		function checkForWall(curX, curY) {
+			if (BlockID[curX / 30][curY / 30].type == 1) {
+				console.log("Wall found at " + curX / 30 + ", " + curY / 30);
+				return true;
+			}
+			return false;
+		}
+
+		// Code for when Mel yeets
+		function removeWall(idX, idY) {
+			console.log("Destroying wall at coordinates " + idX + ", " + idY);
+			BlockID[idX][idY].type = 0;
+		}
+
+
+		// Code that makes all the walls.
+		function fillWall() {
+			for (let i = 0; i < BlockID.length; i++) {
+				for (let j = 0; j < BlockID[i].length; j++) {
+					BlockID[i][j].type = 1;
+				}
+			}
+			BlockID[0][0].type = 0;
+			intv = setInterval(preCheckMel, melSpeed);
+		}
+
+		function debugTest() {
+			var bingus = new coordinates(120, 300);
+			var dingus = bingus;
+			console.log(dingus);
+		}
+		class coordinates {
+			constructor(x, y) {
+				this.x = Math.floor(x / 30);
+				this.y = Math.floor(y / 30);
+			}
+			type() {
+				return BlockID[this.x][this.y].type;
+			}
+			equal(other) {
+				if (other.x == this.x && other.y == this.y) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+
+			toString() {
+				return ("(" + this.x + ", " + this.y + ")");
+			}
+
+			dist(other, direction) {
+				switch (direction) {
+					case 1: // Left
+						return Math.sqrt(Math.pow((Math.abs((this.x - 1) - other.x)), 2) + Math.pow((Math.abs(this.y - other.y)), 2));
+					case 2: // Right
+						return Math.sqrt(Math.pow((Math.abs((this.x + 1) - other.x)), 2) + Math.pow((Math.abs(this.y - other.y)), 2));
+					case 3: // Up
+						return Math.sqrt(Math.pow((Math.abs((this.x) - other.x)), 2) + Math.pow((Math.abs((this.y - 1) - other.y)), 2));
+					case 4: // Down
+						return Math.sqrt(Math.pow((Math.abs((this.x + 1) - other.x)), 2) + Math.pow((Math.abs((this.y + 1) - other.y)), 2));
+					default: // Default
+						return Math.sqrt(Math.pow((Math.abs(this.x - other.x)), 2) + Math.pow((Math.abs(this.y - other.y)), 2));
+				}
+			};
+			move(dir) {
+				switch (dir) {
+					case 0:
+						if (this.y > 0) {
+							this.y = this.y - 1;
+						}
+						break;
+					case 1:
+						if (this.y < 20)
+							this.y = this.y + 1;
+						break;
+					case 2:
+						if (this.x > 0)
+							this.x = this.x - 1;
+						break;
+					case 3:
+						if (this.x < 20)
+							this.x = this.x + 1;
+						break;
+				}
+			}
+			setType(val) {
+				BlockID[this.x][this.y].type = val;
+			}
+			checkType(dir) {
+				switch (dir) {
+					case 0:
+						if (this.y > 0)
+							return BlockID[this.x][this.y - 1].type;
+						else
+							return -1;
+					case 1:
+						if (this.y < 20)
+							return BlockID[this.x][this.y + 1].type;
+						else
+							return -1;
+					case 2:
+						if (this.x > 0)
+							return BlockID[this.x - 1][this.y].type;
+						else
+							return -1;
+					case 3:
+						if (this.x < 20)
+							return BlockID[this.x + 1][this.y].type;
+						else
+							return -1;
+				}
+			}
+			up() {
+				if (this.y > 0)
+					return BlockID[this.x][this.y - 1];
+			}
+
+			down() {
+				if (this.y < BlockID.length)
+					return BlockID[this.x][this.y + 1];
+			}
+
+			left() {
+				if (this.x > 0)
+					return BlockID[this.x - 1][this.y];
+			}
+
+			right() {
+				if (this.x < BlockID.length)
+					return BlockID[this.x + 1][this.y];
+			}
+
+
+		}
+		function setMelSpeed() {
+			melSpeed = document.getElementById("userMel").value;
+		}
+		function setPollySpeed() {
+			pollySpeed = document.getElementById("userPolly").value;
+        }
+	</script>
+	<div style="float: right; color: #ffffff; background-color: #262626; width: 500px; padding:50px">
+		<h1>Controls For AI Speed (Left = Faster | Right = Slower)</h1>
+		<h2>Maze Maker Mel's Speed</h2>
+		<input type="range" min="0" max="300" value="0" id="userMel" />
+		<button onclick="setMelSpeed()">Set</button>
+		<h2>Path Prevailer Polly's Speed</h2>
+		<input type="range" min="0" max="500" value="50" id="userPolly" />
+		<button onclick="setPollySpeed()">Set</button>
+		<h2>Note: To prevent bugs and stressing Polly and Mel out with more instructions, speeds will only apply after each loop. (Loops occur after Polly reaches the goal)</h2>
+	</div>
+	<p style="float: left; color: white">
+		<br>
+		Hey! Welcome to the Maze AI. This program involves two algorithm based AI, Mel and Polly, going through a cycle of creating randomly generated mazes and solving them. 
+		You'll find in-depth explanation in the code itself, and feedback comments from Mel and Polly in the console if you open inspect element.
+		To sum up how Polly solves mazes, she uses first-depth search along with markers that show where she has and hasn't been. Blue means unexplored, green means explored but not completely, and red means a dead end.
+		PS: This isn't the best of my visual design capability, but it works for what it needs to be. Also, if you open up the code itself and see the code, I have a comment log ranging back from when I first made this program, and some words used are not family friendly. 
+	</p>
+</body>
+</html>
